@@ -1,0 +1,69 @@
+<ion-header class="mybg">
+  <ion-toolbar color="mytheme">
+    <ion-buttons slot="start">
+      <ion-menu-button style="color: black"></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center"   style="color: black">Dashboard</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content fullscreen  *ngIf="data">
+  <ion-card class="welcome-card">
+    <ion-img src="/assets/shapes.svg"></ion-img>
+    <ion-card-header>
+      <ion-card-subtitle>Get Started</ion-card-subtitle>
+      <ion-card-title>Welcome to ShopOwner Dashboard</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Your Profile has been created</p>
+    </ion-card-content>
+    <ion-grid>
+        <ion-row>
+          <ion-col size-md="6" size-xs="12"  (click)=" Onclick()" >
+            <ion-card class="card-pink" >
+              <ion-card-header>
+                <ion-icon  name="create-outline" style="margin-left: 40%; color: white;" size="large"></ion-icon><br>
+                <ion-card-title style="color: white; text-align: center;" > Add new Shop</ion-card-title>
+              </ion-card-header>
+            </ion-card>
+          </ion-col>
+          
+          <ion-col size-md="6" size-xs="12" >
+            <ion-card class="card-pink-1" (click)=" Onclick1()">
+              <ion-card-header>
+                <ion-card-title style="color: white; text-align: center;" >{{data.activeShops}}</ion-card-title>
+                <ion-card-title style="color: white; text-align: center;">Active Shops</ion-card-title>
+              </ion-card-header>
+            </ion-card>
+          </ion-col>
+
+          <ion-col size-md="6" size-xs="12" >
+            <ion-card class="card-pink-2" (click)=" Onclick1()">
+              <ion-card-header>
+                <ion-card-title style="color: white; text-align: center;" >{{data.deactiveShops}}</ion-card-title>
+                <ion-card-title style="color: white; text-align: center;">Deactive Shops</ion-card-title>
+              </ion-card-header>
+            </ion-card>
+          </ion-col>
+
+          <ion-col size-md="6" size-xs="12" >
+            <ion-card class="card-pink-3"(click)=" Onclick3()">
+              <ion-card-header>
+                <ion-card-title style="color: white; text-align: center;" >{{data.products}}</ion-card-title>
+                <ion-card-title style="color: white; text-align: center;">Products</ion-card-title>
+              </ion-card-header>
+            </ion-card>
+          </ion-col>
+          <ion-col size-md="6" size-xs="12" >
+            <ion-card class="card-pink-4"  (click)="OrdersClick()">
+              <ion-card-header>
+                <ion-card-title style="color: white; text-align: center;" >{{data.newOrders}}</ion-card-title>
+                <ion-card-title style="color: white; text-align: center;">Ner Orders</ion-card-title>
+              </ion-card-header>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+  </ion-card>
+</ion-content>

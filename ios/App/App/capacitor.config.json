@@ -1,0 +1,13 @@
+{
+    "appId":"com.kuicksave",
+    "appName":"kuicksave",
+    "bundleWebRuntime":false,
+    "npmClient":"npm",
+    "webDir":"build",
+    "plugin":{
+        "SplashScreen":{
+            "launchShowDuration":0
+        }
+    },
+    "cordova":{}
+}

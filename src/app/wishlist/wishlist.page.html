@@ -1,0 +1,46 @@
+<ion-header class="mybg">
+  <ion-toolbar color="mytheme">
+    <ion-buttons slot="start">
+      <ion-menu-button  style="color: black"></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center"  style="color: black">Wishlist</ion-title>
+    <ion-back-button   style="color: black" defaultHref="/" slot="end"> </ion-back-button>
+  </ion-toolbar>
+</ion-header>
+
+  <ion-content class="ion-padding-top" >
+    <div *ngIf="show">
+      <ion-row class="ion-margin-horizontal ion-margin-bottom">
+        <ion-text><strong class="text" style="font-size: 14px; font-family: 'Times New Roman', Times, serif;" >Items in Wishlist</strong></ion-text>
+      </ion-row>
+      <ion-list #slidingList>
+        <ion-item-sliding class="ion-no-padding ion-no-margin" *ngFor="let wishlist of wishlist; let j = index;" class="card" >
+          <ion-item lines="none">
+            <ion-row>
+              <ion-col size="3" class="ion-text-center">
+                <!-- <img *ngIf="show.logo" src="" alt="item.title"> -->
+                <ion-img *ngIf="wishlist.imagepath" src={{env.RESOURCE_URL}}{{wishlist.imagepath}} class="settpic" alt="item.title"></ion-img> 
+                <ion-img *ngIf="!wishlist.imagepath" src='../../assets/images/noimage.jpg' alt="item.title"  class="settpic"></ion-img> 
+                <ion-text color="danger" class="small" (click)="remove(j)">Remove</ion-text>
+              </ion-col>
+              <ion-col size="6">
+                <h3  class="item-name ion-no-margin" style="font-size: 13px;">{{wishlist.title}}</h3>
+                <h5  class="item-def ion-no-margin" >{{wishlist.dimension}}</h5>
+                <h5  class="item-def ion-no-margin">Rs.{{ wishlist.price - (wishlist.price/100)* wishlist.discount}}</h5>
+                  </ion-col>
+              <ion-col size="3" class="ion-float-right">
+                <ion-row class="ion-text-end ion-justify-content-end">
+                 <ion-button class="ion-no-margin ion-text-end"  style="font-size: 14px; font-family: 'Times New Roman', Times, serif;" color="mycolor1" (click)="Onclick(wishlist, wishlist.productId)">Checkout</ion-button>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="danger" (click)="remove(j)">
+              <ion-icon name="trash" size="large"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+    </div>
+  </ion-content>

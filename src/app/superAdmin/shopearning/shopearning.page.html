@@ -1,0 +1,127 @@
+<!-- /**
+ * Shoppr - E-commerce app starter Ionic 4(https://www.enappd.com)
+ *
+ * Copyright © 2018-present Enappd. All rights reserved.
+ *
+ * This source code is licensed as per the terms found in the
+ * LICENSE.md file in the root directory of this source .
+ */ -->
+
+<ion-header class="mybg">
+  <ion-toolbar color="mytheme">
+    <ion-buttons slot="start">
+      <ion-menu-button color="dark"></ion-menu-button>
+    </ion-buttons>
+    <ion-back-button color="dark" defaultHref="/" slot="end"> </ion-back-button>
+    <ion-title color="dark" class="ion-text-center">Shop Earning</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" *ngIf="RoleName=='SuperAdmin' && earning " >
+  <ion-item>
+    <ion-datetime displayFormat="MM, YYYY" [min]="minDate" [max]="maxDate" [(ngModel)]="selectDateString">
+    </ion-datetime>
+    <!-- <ion-button  slot="end"  (click)="GetShopEarning(id,selectDateString)" color="light"  style=" width: 50px; height: 30px; font-size: 14px; font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bold; border-color: black;"><ion-text color="mycolor1" style="border-top-color: black;">Search</ion-text></ion-button>    -->
+    <!-- <ion-button slot="end" expand="round" color="white" style="border-radius: 1px;border-color: black;"><ion-text color="dark" style="font-size: 16px; font-family: Georgia, 'Times New Roman', Times, serif;">Search</ion-text></ion-button> -->
+    <ion-button slot="end" (click)="GetShopEarning(id,selectDateString)" color="white">
+      <ion-icon name="search-outline" (click)="GetShopEarning(id,selectDateString)" color="dark"></ion-icon>
+    </ion-button>
+
+  </ion-item>
+  <ion-card>
+    <ion-card-content  style="color: black;">
+      <p>Total Order Place: {{earning.totalOrders}}</p>
+      <p>Total Amount: {{earning.totalAmount}}</p>
+      <p>Shop Owner Amount: {{earning.shopAmount}}</p>
+      <p>Company Amount: {{earning.companyAmount}}</p>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="orders">
+    <ion-item>Payment Detail</ion-item>
+    <ion-card-content style="color: black;">
+      <p>Account Type: {{accountdetails.shop.accountType}}</p>
+      <p *ngIf="accountdetails.shop.accountType== 'Bank'"> Bank Name: {{accountdetails.shop.bankName}}</p>
+      <p>Account Number: {{accountdetails.shop.accountNumber}}</p>
+
+    </ion-card-content>
+  </ion-card>
+
+  <div style="overflow-x:auto; padding-left: 5px;" >
+    <table style="border: black; border-radius: 2px;">
+      <tr>
+        <th> Order id</th>
+        <th> Order Date</th>
+       <th> Order Amount</th>
+        <th> Payment Status</th>
+        <th>Payment (Action)</th>
+      </tr>
+      <tr *ngFor="let orders of earning.orders">
+        <td >{{orders.id}}</td>
+        <td>{{orders.orderPlacementDate | date}} </td>
+        <td>{{orders.totalAmmount}}</td>
+        <td *ngIf="orders.paymentStatus=='1' ">Pending</td>
+        <td *ngIf="orders.paymentStatus=='2'">Received From Customer</td>
+        <td *ngIf="orders.paymentStatus=='3'">Delievered to Shop Owner</td>
+        <td *ngIf="orders.paymentStatus=='1' || orders.paymentStatus=='2'" ><ion-icon style="padding-left: 5px;" size="large" name="cash-outline" (click)="ChangePaymentStatus(orders.id,orders.paymentStatus)" color="success"></ion-icon></td>
+        <td *ngIf="orders.paymentStatus=='3'">No Action</td>
+     
+      </tr>
+    </table>
+  </div>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+</ion-content>
+
+<ion-content class="ion-padding" *ngIf="earning && RoleName=='ShopOwner'" >
+  <ion-item>
+    <ion-datetime displayFormat="MM, YYYY" [min]="minDate" [max]="maxDate" [(ngModel)]="selectDateString">
+    </ion-datetime>
+    <ion-button slot="end" (click)="GetShopEarning(id,selectDateString)" color="white">
+    <ion-icon name="search-outline" (click)="GetShopEarning(id,selectDateString)" color="dark"></ion-icon>
+    </ion-button>
+
+  </ion-item>
+  <ion-card>
+    <ion-card-content style="color: black;">
+      <p>Total Order Place: {{earning.totalOrders}}</p>
+      <p>Total Amount: {{earning.totalAmount}}</p>
+      <p>Shop Owner Amount: {{earning.shopAmount}}</p>
+      </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="orders">
+    <ion-item style="color: black;">Payment Detail</ion-item>
+    <ion-card-content style="color: black;">
+      <p>Account Type: {{accountdetails.shop.accountType}}</p>
+      <p *ngIf="accountdetails.shop.accountType== 'Bank'"> Bank Name: {{accountdetails.shop.bankName}}</p>
+      <p>Account Number: {{accountdetails.shop.accountNumber}}</p>
+
+    </ion-card-content>
+  </ion-card>
+
+  <div style="overflow-x:auto; padding-left: 5px; " >
+    <table style="color: black; ">
+      <tr>
+        <th> Order id</th>
+        <th> Order Date</th>
+        <th> Order Amount</th>
+        <th> Panelty </th>
+        <th> Payment Status</th>
+        <th>Payment (Action)</th>
+      </tr>
+      <tr *ngFor="let orders of earning.orders">
+        <td>{{orders.id}}</td>
+        <td>{{orders.orderPlacementDate | date}} </td>
+        <td>{{orders.totalAmmount}}</td>
+        <td>{{orders.penalty}}</td>
+        <td *ngIf="orders.paymentStatus=='3'">Received</td>
+        <td *ngIf="orders.paymentStatus=='1' || orders.paymentStatus=='2'">Not Received</td> 
+        <td *ngIf="orders.paymentStatus=='1' || orders.paymentStatus=='2'" style="color: lightcoral;">Pending</td>
+        <td *ngIf="orders.paymentStatus=='3'" style="color: green;">Payment sent</td>
+      </tr>
+    </table>
+  </div>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+</ion-content>
