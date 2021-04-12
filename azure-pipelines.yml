@@ -1,23 +1,79 @@
 # Xcode
-
 # Build, test, and archive an Xcode workspace on macOS.
-# Add steps that install certificates, test, sign, and distribute an app, save build artifacts, and more:
+# Add steps that install certificates, test, sign, and distribute the app, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
 
 trigger:
-- master
+  branches:
+    include:
+      - refs/heads/*
+    exclude:
+      - refs/tags/*
+  paths:
+    exclude:
+      - README.md
+      - LICENSE
+      - CODE_OF_CONDUCT.md
+      - CONTRIBUTING.md
 
-pool:
-  vmImage: 'macos-latest'
+jobs:
+  - job: DangerSwiftLint
+    continueOnError: true
+    pool:
+      vmImage: 'macOS 10.14'
+    steps:
+      - bash: |
+          brew install swiftlint ; brew install danger/tap/danger-swift ; export DANGER_GITHUB_API_TOKEN='$(DANGER_GITHUB_API_TOKEN)' ; danger-swift ci 
+        displayName: 'Danger SwiftLint'
+  - job: PodInstall
+    dependsOn: DangerSwiftLint
+    condition: succeeded()
+    pool:
+      vmImage: 'macOS 10.14'
+    steps:
+      - bash: |
+          cd Tests ; pod update Starscream; pod update BaseAPI; pod install
+        displayName: 'Installing cocoapods'
+  - job: Build
+    dependsOn: PodInstall
+    condition: succeeded()
+    pool:
+      vmImage: 'macOS 10.14'
+    steps:
+      - task: Xcode@5
+        displayName: 'Build Xcode App'
+        inputs:
+          actions: 'build'
+          sdk: 'iphonesimulator'
+          scheme: 'Tests'
+          configuration: 'Debug'
+          xcWorkspacePath: 'Tests/Tests.xcworkspace'
+          xcodeVersion: '11'
+          packageApp: false
 
-steps:
-- task: Xcode@5
-  inputs:
-    actions: 'build'
-    scheme: ''
-    sdk: 'iphoneos'
-    configuration: 'Release'
-
-- task: CocoaPods@0
-  inputs:
-    forceRepoUpdate: false
+  - job: Test
+    dependsOn: Build
+    condition: succeeded()
+    pool:
+      vmImage: 'macOS 10.14'
+    steps:
+      - task: Xcode@5
+        displayName: 'Running tests'
+        inputs:
+          actions: 'test'
+          sdk: 'iphonesimulator'
+          configuration: 'Debug'
+          xcWorkspacePath: 'Tests/Tests.xcworkspace'
+          scheme: 'TestsTests'
+          xcodeVersion: '11'
+          publishJUnitResults: true
+          destinationPlatformOption: 'iOS'
+          destinationTypeOption: 'simulators'
+          destinationSimulators: 'iPhone 8'
+      - bash: |
+          cd Tests & bash <(curl -s https://codecov.io/bash) -t $(CODECOV_TOKEN)
+        displayName: 'Upload coverage to codecov.io'
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFiles: '**/junit.xml'
+        displayName: 'Publish tests results'
