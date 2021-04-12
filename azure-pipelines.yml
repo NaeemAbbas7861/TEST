@@ -17,8 +17,6 @@ steps:
     scheme: ''
     sdk: 'iphoneos'
     configuration: 'Release'
-    xcWorkspacePath: 'ios/App/App.xcworkspace'
-    xcodeVersion: 'default' # Options: 8, 9, 10, 11, default, specifyPath
 
 - task: CocoaPods@0
   inputs:
