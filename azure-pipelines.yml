@@ -1,33 +1,20 @@
 # Xcode
-# Build, test, or archive an Xcode workspace on macOS. Optionally package an app.
+# Build, test, and archive an Xcode workspace on macOS.
+# Add steps that install certificates, test, sign, and distribute an app, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
+
+trigger:
+- {{ branch }}
+
+pool:
+  vmImage: 'macos-latest'
+
+steps:
 - task: Xcode@5
   inputs:
-    #actions: 'build' 
-    #configuration: '$(Configuration)' # Optional
-    #sdk: '$(SDK)' # Optional
-    #xcWorkspacePath: '**/*.xcodeproj/project.xcworkspace' # Optional
-    #scheme: # Optional
-    #xcodeVersion: 'default' # Optional. Options: 8, 9, 10, default, specifyPath
-    #xcodeDeveloperDir: # Optional
-    packageApp: 
-    #archivePath: # Optional
-    #exportPath: 'output/$(SDK)/$(Configuration)' # Optional
-    #exportOptions: 'auto' # Optional. Options: auto, plist, specify
-    #exportMethod: 'development' # Required when exportOptions == Specify
-    #exportTeamId: # Optional
-    #exportOptionsPlist: # Required when exportOptions == Plist
-    #exportArgs: # Optional
-    #signingOption: 'nosign' # Optional. Options: nosign, default, manual, auto
-    #signingIdentity: # Optional
-    #provisioningProfileUuid: # Optional
-    #provisioningProfileName: # Optional
-    #teamId: # Optional
-    #destinationPlatformOption: 'default' # Optional. Options: default, iOS, tvOS, macOS, custom
-    #destinationPlatform: # Optional
-    #destinationTypeOption: 'simulators' # Optional. Options: simulators, devices
-    #destinationSimulators: 'iPhone 8' # Optional. Default value: iPhone8 for Xcode 11 and iPhone 7 for other iOS projects; Apple TV for tvOS projects.
-    #destinationDevices: # Optional
-    #args: # Optional
-    #workingDirectory: # Optional
-    #useXcpretty: true # Optional
-    #publishJUnitResults: # Optional
+    actions: 'build'
+    scheme: ''
+    sdk: 'iphoneos'
+    configuration: 'Release'
+    xcWorkspacePath: '**/*.xcodeproj/project.xcworkspace'
+    xcodeVersion: 'default' # Options: 8, 9, 10, 11, 12, default, specifyPath
