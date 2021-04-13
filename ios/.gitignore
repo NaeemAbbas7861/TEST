@@ -3,11 +3,10 @@
 # And the CLI then renames it
 
 App/build
-App/Pods
 App/public
 App/Podfile.lock
 xcuserdata
 
 # Cordova plugins for Capacitor
-capacitor-cordova-ios-plugins
+# capacitor-cordova-ios-plugins
 
